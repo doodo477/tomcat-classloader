@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<Context>
+  <WatchedResource>WEB-INF/web.xml</WatchedResource>
+<!-- 
+Overview
+
+DynamicVirtualWebappLoader appends the the web application content path onto
+the provided virtualClassPath. The virtual classpath is search first before
+the default web-application classpath is searched. This allows the server
+administrator to store all the config files in a centeral location with each
+web-application having its own unique folder for properties that can be loaded
+without any modification to the war file. This also cuts down on possible
+conflict where two web-applications have the same properties file names on the
+global classpath.
+
+eg... 
+Web Application context: ntflora
+virtualClasspath=/root/pswd
+
+LoadResources first searches the virtualclasspath for the requested resource
+before using the default classpath.
+/root/pswd/ntflora
+
+eg.. 
+Web Application context: key-server
+virtualClasspath=/root/pswd
+
+LoadResources first searches the virtualclasspath for the requested resource
+before using the default classpath.
+/root/pswd/key-server
+
+To take advantage of this system, all web-applications need to do is load
+their properties files directly via LoadResources that searches the
+classpath. This is the standard behavior for hibernate and log4j. This
+allows modificiation of usernames/passwords/logging/configuraiton of modules
+without the need to re-deploy a modified war file.
+
+Installation
+-->
+
+  <Loader
+    searchVirtualFirst="true" 
+    className="rds.DynamicVirtualWebappLoader"
+    virtualClasspath="/path/to/stored/server/configs"
+  />
+</Context>
